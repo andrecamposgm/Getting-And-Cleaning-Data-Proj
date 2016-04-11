@@ -139,6 +139,6 @@ names(mergedData)   <- descriptiveColNames
 
 # Finally. Objective 5 Creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 tidyData <- with(mergedData, aggregate(mergedData[,1:18, with = F], 
-                                 by = list(Activity, Subject), 
+                                 by = list(Actifity = Activity, Subject = Subject), 
                                  FUN = mean ))
 write.table(tidyData, "../tidy_data.txt")
