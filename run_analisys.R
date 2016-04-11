@@ -126,7 +126,7 @@ prepareEnvironment()
 # load column names and activity labels 
 loadColumnsAndActivities()
 
-# Load data sets: Objectives 2 and 3: 
+# Load data sets: Objectives 2 and 3
 test_data  <- loadDataByContext("test")
 train_data <- loadDataByContext("train")
 

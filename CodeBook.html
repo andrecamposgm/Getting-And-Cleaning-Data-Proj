@@ -125,6 +125,30 @@ $(document).ready(function () {
 <p>To run run the code, basically load the source as described below:</p>
 <pre><code>source(&quot;run_analisys.R&quot;)</code></pre>
 </div>
+<div id="final-structure-of-tidy-data" class="section level2">
+<h2>Final structure of tidy data</h2>
+<p>The operations executed in method getDescriptiveColNames renamed the columns approprietly to generate the following self explainable list of variables in the tidy data.</p>
+<pre><code> [1] &quot;Actifity&quot;                                         
+ [2] &quot;Subject&quot;                                          
+ [3] &quot;Time Body Accelerometer Magnitude -Mean&quot;          
+ [4] &quot;Time Body Accelerometer Magnitude -SD&quot;            
+ [5] &quot;Time GravityAccelerometer Magnitude -Mean&quot;        
+ [6] &quot;Time GravityAccelerometer Magnitude -SD&quot;          
+ [7] &quot;Time Body Accelerometer JerkMagnitude -Mean&quot;      
+ [8] &quot;Time Body Accelerometer JerkMagnitude -SD&quot;        
+ [9] &quot;Time Body Gyroscope Magnitude -Mean&quot;              
+[10] &quot;Time Body Gyroscope Magnitude -SD&quot;                
+[11] &quot;Time Body Gyroscope JerkMagnitude -Mean&quot;          
+[12] &quot;Time Body Gyroscope JerkMagnitude -SD&quot;            
+[13] &quot;Frequency Body Accelerometer Magnitude -Mean&quot;     
+[14] &quot;Frequency Body Accelerometer Magnitude -SD&quot;       
+[15] &quot;Frequency Body  Accelerometer JerkMagnitude -Mean&quot;
+[16] &quot;Frequency Body  Accelerometer JerkMagnitude -SD&quot;  
+[17] &quot;Frequency Body  Gyroscope Magnitude -Mean&quot;        
+[18] &quot;Frequency Body  Gyroscope Magnitude -SD&quot;          
+[19] &quot;Frequency Body  Gyroscope JerkMagnitude -Mean&quot;    
+[20] &quot;Frequency Body  Gyroscope JerkMagnitude -SD&quot;      </code></pre>
+</div>
 <div id="source-code-definitions" class="section level2">
 <h2>Source code definitions</h2>
 <p>Below is described each code block inside the run_analisys.R.</p>
@@ -214,6 +238,19 @@ activities_labels &lt;- NULL</code></pre>
     
   return(data)
 }</code></pre>
+<p>– Rename variables in the data set in order to have descriptive variable names</p>
+<pre><code>getDescriptiveColNames &lt;- function(colNames) {
+  colNames &lt;- gsub(&quot;std\\(\\)&quot;, &quot;SD&quot;, colNames)
+  colNames &lt;- gsub(&quot;mean\\(\\)&quot;, &quot;Mean&quot;, colNames)
+  colNames &lt;- gsub(&quot;^t&quot;, &quot;Time &quot;, colNames)
+  colNames &lt;- gsub(&quot;^f&quot;, &quot;Frequency &quot;, colNames)
+  colNames &lt;- gsub(&quot;Acc&quot;, &quot;Accelerometer &quot;, colNames)
+  colNames &lt;- gsub(&quot;Gyro&quot;, &quot;Gyroscope &quot;, colNames)
+  colNames &lt;- gsub(&quot;Mag&quot;, &quot;Magnitude &quot;, colNames)
+  colNames &lt;- gsub(&quot;BodyBody&quot;, &quot;Body &quot;, colNames) 
+  colNames &lt;- gsub(&quot;Body&quot;, &quot;Body &quot;, colNames) 
+  return(colNames)
+}</code></pre>
 </div>
 <div id="main-code-block" class="section level3">
 <h3>Main code block</h3>
@@ -228,8 +265,8 @@ activities_labels &lt;- NULL</code></pre>
 <p>– Merges training and test data sets: Objective 1</p>
 <pre><code>mergedData &lt;- rbindlist(list(test_data, train_data)) </code></pre>
 <p>– Rename variables: Objective 4</p>
-<pre><code>descriptiveColNames &lt;- getDescriptiveColNames(names(mergedData))
-names(mergedData)   &lt;- descriptiveColNames</code></pre>
+<pre class="javascript"><code>    descriptiveColNames &lt;- getDescriptiveColNames(names(mergedData))
+    names(mergedData)   &lt;- descriptiveColNames</code></pre>
 <p>– Finally, the objective 5: Creates a second, independent tidy data set with the average of each variable for each activity and each subject.</p>
 <pre><code>tidyData &lt;- with(mergedData, aggregate(mergedData[,1:18, with = F], 
                                  by = list(Actifity = Activity, Subject = Subject), 
